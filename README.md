@@ -12,6 +12,19 @@ A real-time vehicle detection and traffic analysis web application powered by YO
     </div>
 </body>
 
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=f_7gi9ArWt0" target="_blank">
+    <img src="https://img.youtube.com/vi/f_7gi9ArWt0/0.jpg" 
+         alt="Vehicle Detection Demo" 
+         style="width:70%; border-radius:10px;">
+  </a>
+</p>
+
+<p align="center">
+  <strong>▶ Watch the Demo Video</strong>
+</p>
+
+
 ## **📁 Project Structure**
 ```
 project/
