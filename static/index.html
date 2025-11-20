@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Detection System</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-section">
+                <div class="logo-icon">🚗</div>
+                <h1 class="title">Vehicle Detection System</h1>
+            </div>
+            <div class="status-indicator" id="systemStatus">
+                <span class="status-dot"></span>
+                <span class="status-text">System Ready</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Screen -->
+            <div class="welcome-screen" id="welcomeScreen">
+                <div class="welcome-content">
+                    <div class="animated-icon">
+                        <svg class="car-svg" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="50" y="40" width="100" height="30" fill="#4a90e2" rx="5"/>
+                            <rect x="60" y="30" width="40" height="15" fill="#4a90e2" rx="3"/>
+                            <circle cx="70" cy="75" r="10" fill="#2c3e50"/>
+                            <circle cx="130" cy="75" r="10" fill="#2c3e50"/>
+                            <rect x="55" y="50" width="15" height="10" fill="#fff" opacity="0.8"/>
+                            <rect x="130" y="50" width="15" height="10" fill="#fff" opacity="0.8"/>
+                        </svg>
+                    </div>
+                    <h2>Welcome to Vehicle Detection</h2>
+                    <p>Advanced AI-powered traffic analysis system</p>
+                    <button class="btn-primary btn-large" onclick="showUploadSection()">
+                        <span>Get Started</span>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M5 10h10M10 5l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Upload Section -->
+            <div class="upload-section hidden" id="uploadSection">
+                <div class="upload-card">
+                    <div class="upload-header">
+                        <h2>Upload Video</h2>
+                        <p>Support for MP4, AVI, and MOV formats</p>
+                    </div>
+
+                    <div class="upload-area" id="uploadArea">
+                        <input type="file" id="videoInput" accept="video/mp4,video/avi,video/mov" onchange="handleFileSelect(event)" hidden>
+                        <div class="upload-icon">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 15V3m0 0L8 7m4-4l4 4M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <p class="upload-text">Drag and drop your video here</p>
+                        <p class="upload-subtext">or</p>
+                        <button class="btn-secondary" onclick="document.getElementById('videoInput').click()">
+                            Browse Files
+                        </button>
+                    </div>
+
+                    <div class="file-info hidden" id="fileInfo">
+                        <div class="file-details">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M14 2v6h6M10 13l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            <div class="file-name-container">
+                                <p class="file-name" id="fileName"></p>
+                                <p class="file-size" id="fileSize"></p>
+                            </div>
+                        </div>
+                        <button class="btn-primary" onclick="processVideo()">
+                            <span>Process Video</span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M5 3l14 9-14 9V3z" fill="currentColor"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Processing Progress -->
+                <div class="progress-card hidden" id="progressCard">
+                    <div class="progress-content">
+                        <div class="circular-progress">
+                            <svg class="progress-ring" width="200" height="200">
+                                <defs>
+                                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+                                        <stop offset="50%" style="stop-color:#ffed4e;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#ffd700;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                                <circle class="progress-ring-circle-bg" cx="100" cy="100" r="85"></circle>
+                                <circle class="progress-ring-circle" cx="100" cy="100" r="85" id="progressCircle"></circle>
+                            </svg>
+                            <div class="progress-percent" id="progressPercent">0%</div>
+                        </div>
+                        <h3 class="progress-title">Processing Video</h3>
+                        <p class="progress-status" id="progressStatus">Analyzing frames...</p>
+                        <div class="progress-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div class="results-section hidden" id="resultsSection">
+                    <div class="results-header">
+                        <h2>Processing Complete</h2>
+                        <div class="result-actions">
+                            <button class="btn-secondary" onclick="downloadVideo()">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 3v12m0 0l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                Download Video
+                            </button>
+                            <button class="btn-primary" onclick="resetApp()">
+                                Process Another Video
+                            </button>
+                        </div>
+                    </div>
+                    <div class="video-container">
+                        <div class="download-message" style="text-align: center; padding: 60px 20px;">
+                            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" style="margin-bottom: 20px; color: var(--accent-primary);">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <h3 style="color: var(--text-primary); margin-bottom: 10px; font-size: 24px;">Video Ready!</h3>
+                            <p style="color: var(--text-secondary); margin-bottom: 30px; font-size: 16px;">Your video has been processed successfully.<br>Click "Download Video" to save it.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>🛣️ &copy; 2025 Vehicle Detection System • Powered by YOLOv8 & FastAPI • Road-Themed UI ⚠️</p>
+        </footer>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast hidden" id="toast">
+        <span id="toastMessage"></span>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
