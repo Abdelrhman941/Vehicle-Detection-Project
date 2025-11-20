@@ -266,8 +266,7 @@ function openVideoInNewTab() {
         return;
     }
 
-    const aviFilename = outputFilename.replace('.mp4', '.avi');
-    const videoUrl = `/outputs/${aviFilename}`;
+    const videoUrl = `/outputs/${outputFilename}`;
 
     console.log('Opening video URL:', videoUrl);
 
@@ -289,10 +288,9 @@ function downloadVideo() {
         return;
     }
 
-    const aviFilename = outputFilename.replace('.mp4', '.avi');
     const link = document.createElement('a');
-    link.href = `/outputs/${aviFilename}`;
-    link.download = aviFilename;
+    link.href = `/outputs/${outputFilename}`;
+    link.download = outputFilename;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

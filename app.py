@@ -161,6 +161,20 @@ async def get_status():
     return processing_status
 
 
+@app.get("/api/videos")
+async def list_videos():
+    """List all processed videos"""
+    videos = []
+    for file in OUTPUT_DIR.glob("*_processed.*"):
+        if file.suffix in ['.mp4', '.avi']:
+            videos.append({
+                "filename": file.name,
+                "size": file.stat().st_size,
+                "url": f"/outputs/{file.name}"
+            })
+    return {"videos": videos}
+
+
 @app.post("/api/upload")
 async def upload_video(file: UploadFile = File(...)):
     """Upload video file for processing"""
